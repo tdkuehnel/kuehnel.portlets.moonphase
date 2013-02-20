@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<portlets>
+
+ <!-- Portlet type registrations -->
+
+ <portlet
+   addview="kuehnel.portlets.moonphase.MoonphasePortlet"
+   title="Moonphase Portlet"
+   description="Plone moonphase portlet"
+   />
+
+</portlets>
