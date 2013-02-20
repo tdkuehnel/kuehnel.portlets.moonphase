@@ -1,6 +1,4 @@
 Introduction
 ============
 
-
-
-This product may contain traces of nuts.
+Plone Moonphase Portlet - a configurable user interactive plone portlet
