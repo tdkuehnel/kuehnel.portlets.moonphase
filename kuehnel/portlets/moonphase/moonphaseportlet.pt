@@ -1,20 +1,44 @@
+<div class="moonphasewrapper"
+     tal:define="instanceid view/getInstanceId"
+     tal:attributes="id python:'moonphasewrapper-%s' % instanceid"
+     i18n:domain="kuehnel.portlets.moonphase">
+
 <dl class="portlet portletMoonphasePortlet"
+    tal:attributes="id instanceid"
     i18n:domain="kuehnel.portlets.moonphase">
 
-    <dt class="portletHeader">
+    <dt class="portletHeader"
+        tal:define="year view/year;">
+
         <span class="portletTopLeft"></span>
-        Header
+	<a href="#" rel="nofollow"
+	   title="Previous month"
+	   tal:define="params view/getUrlParamsMetadata"
+	   tal:attributes="id string:moonphasePreviousLink;
+	                   href python:'%s/@@refreshMoonphase?direction:string=previous&amp;year:int=%d&amp;%s' % (request['ACTUAL_URL'], year, params);">
+			   &laquo;</a>
+        <span tal:content="view/year" tal:attributes="id python:'year-%s' % instanceid"></span>
+	<a href="#" rel="nofollow"
+	   title="Next month"
+	   tal:define="params view/getUrlParamsMetadata"
+	   tal:attributes="id string:moonphaseNextLink;
+	                   href python:'%s/@@refreshMoonphase?direction:string=next&amp;year:int=%d&amp;%s' % (request['ACTUAL_URL'], year, params);">
+			   &raquo;</a>
         <span class="portletTopRight"></span>
     </dt>
 
     <dd class="portletItem odd">
-        Body text
+	Moonphase dynamic portlet
     </dd>
 
     <dd class="portletFooter">
         <span class="portletBottomLeft"></span>
-        Footer
+        &nbsp;
         <span class="portletBottomRight"></span>
     </dd>
 
 </dl>
+</div>
+<script 
+ tal:content="view/getJsSnippet" type="text/javascript">
+</script>
