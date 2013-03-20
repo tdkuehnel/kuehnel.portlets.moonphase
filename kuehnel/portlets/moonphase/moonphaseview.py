@@ -6,6 +6,8 @@ from zope.component import getUtility, getMultiAdapter
 from plone.portlets.interfaces import IPortletManager
 from plone.portlets.interfaces import IPortletRetriever
 
+import logging
+
 class MoonphaseView(BrowserView):
 
     # --
@@ -39,20 +41,32 @@ class MoonphaseView(BrowserView):
         return manager
     
     def render(self):
+        logger = logging.getLogger("Plone")
+        print " "
         print "refreshment of moonphase portlet"
 
         content = self.context.aq_inner
         #content = self.context
-
-        print " "
-        print self.context
+        #import pdb; pdb.set_trace()
+            
+        context_state = getMultiAdapter((content, self.request), name=u'plone_context_state')
+        print self.context, "is default page: %s" % context_state.is_default_page(), self.context.default_page
         name = self.request.form.get("portletName")
         managername = self.request.form.get("portletManager")
         key = self.request.form.get("portletKey")
 
         print name, managername, key
         portlet = self.getPortletById(content, managername, key, name)
-        
+        if not portlet:
+            # let's try to find it assigned on the default_page view
+            defaultpage = getattr(content,getattr(content,"default_page",None),None)
+            if defaultpage:
+                portlet = self.getPortletById(defaultpage, managername, key, name)
+                content = defaultpage
+            else:
+                logger.warn('cannot find an assignment for a portlet of type %s in ajax update request' % name)
+                return None            
+            
         manager = self.getPortletManager(managername)
 
         managerRenderer = manager(content, self.request, self)
